@@ -5,16 +5,16 @@ public class ImagePanel extends JPanel {
     public static final int NORMAL = 0;
     public static final int HOVER = 1;
     public static final int HIGHLIGHTED = 2;
-
+    private final int width;
     private Image backgroundImage;
     private JCheckBox checkBox;
     private int highlightState;
-
     private boolean firstRender = true;
 
-    public ImagePanel(Image backgroundImage) {
+    public ImagePanel(Image backgroundImage, int width) {
         super();
         this.backgroundImage = backgroundImage;
+        this.width = width;
         checkBox = null;
         highlightState = 0;
     }
@@ -33,15 +33,7 @@ public class ImagePanel extends JPanel {
     }
 
     public boolean getSelectState() {
-        if(checkBox != null && checkBox.isSelected())
-            return true;
-        else
-            return false;
-    }
-
-    public void setSelectState(boolean selectedState) {
-        if(checkBox != null)
-            checkBox.setSelected(selectedState);
+        return checkBox != null && checkBox.isSelected();
     }
 
     @Override
@@ -56,19 +48,25 @@ public class ImagePanel extends JPanel {
             super.setBackground(new Color(51, 104, 196));
 
         if(firstRender) {
-            backgroundImage = backgroundImage.getScaledInstance(this.getWidth() - 20, (int)(this.getWidth() * 1.4142) - 20, Image.SCALE_SMOOTH);
+            backgroundImage = backgroundImage.getScaledInstance((int)(width * 0.8), (int)(width * 1.4142 * 0.8), Image.SCALE_SMOOTH);
             firstRender = false;
         }
-        g.drawImage(backgroundImage, 10, 10, null);
+
+        g.drawImage(backgroundImage, (int)(width * 0.1), (int)(width * 0.1), null);
     }
 
     @Override
     public Component add(Component component) {
         super.add(component);
-        if(component instanceof JCheckBox && checkBox == null) {
+
+        if(component instanceof JCheckBox && checkBox == null)
             checkBox = (JCheckBox) component;
-        }
 
         return component;
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(width, (int)(width * 1.4142));
     }
 }

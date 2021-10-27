@@ -5,7 +5,7 @@ import java.awt.Image;
 import java.io.IOException;
 
 public class PDFPage {
-    private PDDocument page;
+    private final PDDocument page;
     private boolean selected;
 
     public PDFPage(PDDocument page) {
@@ -19,13 +19,11 @@ public class PDFPage {
 
     public Image getThumbnail() {
         Image thumbnail = null;
-
         try {
             thumbnail = new PDFRenderer(page).renderImage(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return thumbnail;
     }
 
